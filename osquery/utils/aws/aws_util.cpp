@@ -306,10 +306,10 @@ OsqueryAWSCredentialsProviderChain::OsqueryAWSCredentialsProviderChain(bool sts)
       std::make_shared<Aws::Auth::ProfileConfigFileAWSCredentialsProvider>());
 
 // This is disabled on Windows because it causes a crash
-#if !defined(WINDOWS)
+//#if !defined(WINDOWS)
   AddProvider(
       std::make_shared<Aws::Auth::InstanceProfileCredentialsProvider>());
-#endif
+//#endif
 }
 
 Status getAWSRegionFromProfile(std::string& region) {
