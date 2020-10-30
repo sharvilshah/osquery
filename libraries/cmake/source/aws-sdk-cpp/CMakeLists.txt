@@ -27,6 +27,9 @@ function(generateAwsCcommonTarget)
   set(binary_root "${CMAKE_CURRENT_BINARY_DIR}/aws-c-common")
 
   add_library(thirdparty_aws_c_common STATIC EXCLUDE_FROM_ALL
+    "${library_root}/source/arch/generic/cpuid.c"
+    "${library_root}/source/allocator.c"
+    "${library_root}/source/allocator_sba.c"
     "${library_root}/source/array_list.c"
     "${library_root}/source/assert.c"
     "${library_root}/source/byte_buf.c"
@@ -38,18 +41,27 @@ function(generateAwsCcommonTarget)
     "${library_root}/source/device_random.c"
     "${library_root}/source/encoding.c"
     "${library_root}/source/error.c"
+    "${library_root}/source/fifo_cache.c"
     "${library_root}/source/hash_table.c"
+    "${library_root}/source/lifo_cache.c"
     "${library_root}/source/linked_hash_table.c"
     "${library_root}/source/log_channel.c"
     "${library_root}/source/log_formatter.c"
     "${library_root}/source/logging.c"
     "${library_root}/source/log_writer.c"
     "${library_root}/source/lru_cache.c"
+    "${library_root}/source/math.c"
+    "${library_root}/source/memtrace.c"
     "${library_root}/source/priority_queue.c"
+    "${library_root}/source/process_common.c"
+    "${library_root}/source/ref_count.c"
+    "${library_root}/source/resource_name.c"
     "${library_root}/source/ring_buffer.c"
+    "${library_root}/source/statistics.c"
     "${library_root}/source/string.c"
     "${library_root}/source/task_scheduler.c"
     "${library_root}/source/uuid.c"
+    "${library_root}/source/xml_parser.c"
   )
 
   if(DEFINED PLATFORM_POSIX)
@@ -59,6 +71,7 @@ function(generateAwsCcommonTarget)
       "${library_root}/source/posix/device_random.c"
       "${library_root}/source/posix/environment.c"
       "${library_root}/source/posix/mutex.c"
+      "${library_root}/source/posix/process.c"
       "${library_root}/source/posix/rw_lock.c"
       "${library_root}/source/posix/system_info.c"
       "${library_root}/source/posix/thread.c"
@@ -72,6 +85,7 @@ function(generateAwsCcommonTarget)
       "${library_root}/source/windows/device_random.c"
       "${library_root}/source/windows/environment.c"
       "${library_root}/source/windows/mutex.c"
+      "${library_root}/source/windows/process.c"
       "${library_root}/source/windows/rw_lock.c"
       "${library_root}/source/windows/system_info.c"
       "${library_root}/source/windows/thread.c"
@@ -80,6 +94,15 @@ function(generateAwsCcommonTarget)
 
   else()
     message(FATAL_ERROR "Unsupported operating system")
+  endif()
+
+  if(DEFINED PLATFORM_POSIX)# AND TARGET_PROCESSOR STREQUAL "x86_64")
+    set(additional_source_file_list
+      "${library_root}/source/arch/generic/cpuid.c"
+      "${library_root}/source/arch/intel/cpuid.c"
+      #"${library_root}/source/arch/intel/encoding_avx2.c"
+      "${library_root}/source/arch/intel/asm/cpuid.c"
+    )
   endif()
 
   target_sources(thirdparty_aws_c_common PRIVATE
@@ -111,16 +134,16 @@ function(generateAwsChecksumsTarget)
   set(library_root "${CMAKE_CURRENT_SOURCE_DIR}/aws-checksums_src")
 
   add_library(thirdparty_aws_checksums STATIC EXCLUDE_FROM_ALL
-    "${library_root}/source/cpuid_generic.c"
+    #"${library_root}/source/cpuid_generic.c"
     "${library_root}/source/crc.c"
-    "${library_root}/source/crc_jni.c"
+    #"${library_root}/source/crc_jni.c"
     "${library_root}/source/crc_sw.c"
   )
 
   if(DEFINED PLATFORM_POSIX AND TARGET_PROCESSOR STREQUAL "x86_64")
     set(additional_source_file_list
-      "${library_root}/source/intel/cpuid.c"
-      "${library_root}/source/intel/crc32c_sse42_asm.c"
+      #"${library_root}/source/intel/cpuid.c"
+      "${library_root}/source/intel/asm/crc32c_sse42_asm.c"
     )
 
   elseif(DEFINED PLATFORM_POSIX AND TARGET_PROCESSOR STREQUAL "aarch64")
@@ -145,6 +168,10 @@ function(generateAwsChecksumsTarget)
 
   target_include_directories(thirdparty_aws_checksums SYSTEM PUBLIC
     "${library_root}/include"
+  )
+
+  target_link_libraries(thirdparty_aws_checksums PUBLIC
+    thirdparty_aws_c_common
   )
 
   target_link_libraries(thirdparty_aws_checksums PRIVATE
