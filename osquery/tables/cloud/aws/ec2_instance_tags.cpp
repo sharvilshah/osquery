@@ -46,6 +46,7 @@ QueryData genEc2InstanceTags(QueryContext& context) {
   request.SetMaxResults(50); // Max tags per EC2 instance
   request.AddFilters(filter);
 
+
   model::DescribeTagsOutcome outcome = client->DescribeTags(request);
   if (!outcome.IsSuccess()) {
     VLOG(1) << "Error getting EC2 instance tags: "

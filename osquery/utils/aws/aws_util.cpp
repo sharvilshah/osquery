@@ -157,6 +157,7 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
 
   for (const auto& requestHeader : request.GetHeaders()) {
     req << http::Request::Header(requestHeader.first, requestHeader.second);
+    VLOG(1) << "Headers: " << requestHeader.first << " value: " << requestHeader.second;
   }
 
   std::string body;
