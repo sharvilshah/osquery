@@ -31,7 +31,7 @@ QueryData genEc2InstanceTags(QueryContext& context) {
     return results;
   }
 
-  return results;
+
   std::shared_ptr<ec2::EC2Client> client;
   Status s = makeAWSClient<ec2::EC2Client>(client, region, false);
   if (!s.ok()) {
