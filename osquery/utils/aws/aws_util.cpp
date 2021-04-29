@@ -178,6 +178,7 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
       resp = client.post(req, body, request.GetContentType());
       break;
     case Aws::Http::HttpMethod::HTTP_PUT:
+      VLOG(1) << "PUT called";
       resp = client.put(req, body, request.GetContentType());
       break;
     case Aws::Http::HttpMethod::HTTP_HEAD:
