@@ -157,7 +157,7 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
 
   for (const auto& requestHeader : request.GetHeaders()) {
     req << http::Request::Header(requestHeader.first, requestHeader.second);
-    VLOG(1) << "Headers: " << requestHeader.first << " value: " << requestHeader.second;
+    VLOG(1) << "Req Headers: " << requestHeader.first << " value: " << requestHeader.second;
   }
 
   std::string body;
@@ -202,13 +202,17 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
     response->SetResponseCode(
         static_cast<Aws::Http::HttpResponseCode>(resp.status()));
 
+    VLOG(1) << "Response code: " << resp.status();
     for (const auto& header : resp.headers()) {
       if (header.first == "content-type") {
         response->SetContentType(header.second);
       }
       response->AddHeader(header.first, header.second);
+      VLOG(1) << "Resp Headers: " << header.first << " value: " << header.second;
     }
 
+    VLOG(1) << "Response Body: ";
+    VLOG(1) << resp.body();
     response->GetResponseBody() << resp.body();
 
   } catch (const std::exception& e) {

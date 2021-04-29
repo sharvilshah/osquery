@@ -33,7 +33,7 @@ QueryData genEc2InstanceTags(QueryContext& context) {
 
 
   std::shared_ptr<ec2::EC2Client> client;
-  Status s = makeAWSClient<ec2::EC2Client>(client, region, true);
+  Status s = makeAWSClient<ec2::EC2Client>(client, region, false);
   if (!s.ok()) {
     VLOG(1) << "Failed to create EC2 client: " << s.what();
     return results;
