@@ -25,12 +25,16 @@ namespace model = Aws::EC2::Model;
 
 QueryData genEc2InstanceTags(QueryContext& context) {
   QueryData results;
+  /*
   std::string instance_id, region;
   getInstanceIDAndRegion(instance_id, region);
   if (instance_id.empty() || region.empty()) {
     return results;
   }
+  */
 
+  std::string region = "us-east-2";
+  std::string instance_id = "i-0ca6f469d237d2562";
 
   std::shared_ptr<ec2::EC2Client> client;
   Status s = makeAWSClient<ec2::EC2Client>(client, region, false);

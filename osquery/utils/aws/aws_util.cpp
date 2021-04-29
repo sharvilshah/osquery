@@ -148,6 +148,8 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
     LOG(WARNING) << "Read/write limiters are unsupported";
   }
 
+  VLOG(1) << "===========================================================";
+
   Aws::Http::URI uri = request.GetUri();
   uri.SetPath(Aws::Http::URI::URLEncodePath(uri.GetPath()));
   Aws::String url = uri.GetURIString();
@@ -155,6 +157,7 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
   http::Client client(TLSTransport().getInternalOptions());
   http::Request req(url);
 
+  VLOG(1) << "URL : " << url;
   for (const auto& requestHeader : request.GetHeaders()) {
     req << http::Request::Header(requestHeader.first, requestHeader.second);
     VLOG(1) << "Req Headers: " << requestHeader.first << " value: " << requestHeader.second;
@@ -166,6 +169,11 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
     ss << request.GetContentBody()->rdbuf();
     body = ss.str();
   }
+
+  VLOG(1) << "Request body: ";
+  VLOG(1) << body;
+
+  VLOG(1) << "=========== RESP BELOW ===============";
 
   auto response = std::make_shared<Standard::StandardHttpResponse>(request);
   try {
