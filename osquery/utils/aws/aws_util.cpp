@@ -439,6 +439,7 @@ std::string getIMDSToken() {
   } catch (const std::system_error& e) {
     VLOG(1) << "Request for " << kImdsTokenResource << " failed:" << e.what();
   }
+  VLOG(1) << "IMDS TOken put called, token: " << token;
   return token;
 }
 
