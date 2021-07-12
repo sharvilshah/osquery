@@ -175,28 +175,33 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
 
     switch (request.GetMethod()) {
     case Aws::Http::HttpMethod::HTTP_GET:
-      resp = client.get(req);
       verb = "get";
+      resp = client.get(req);
+
       break;
     case Aws::Http::HttpMethod::HTTP_POST:
-      resp = client.post(req, body, request.GetContentType());
       verb = "post";
+      resp = client.post(req, body, request.GetContentType());
+
       break;
     case Aws::Http::HttpMethod::HTTP_PUT:
-      resp = client.put(req, body, request.GetContentType());
       verb = "put";
+      resp = client.put(req, body, request.GetContentType());
+
       break;
     case Aws::Http::HttpMethod::HTTP_HEAD:
-      resp = client.head(req);
       verb = "head";
+      resp = client.head(req);
+
       break;
     case Aws::Http::HttpMethod::HTTP_PATCH:
       LOG(ERROR) << "osquery-http_client does not support HTTP PATCH";
       return nullptr;
       break;
     case Aws::Http::HttpMethod::HTTP_DELETE:
-      resp = client.delete_(req);
       verb = "delete";
+      resp = client.delete_(req);
+
       break;
     default:
       verb = "error";
