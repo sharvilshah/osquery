@@ -167,21 +167,28 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
   }
 
   auto response = std::make_shared<Standard::StandardHttpResponse>(request);
+  std::string verb;
   try {
     http::Response resp;
+
+
 
     switch (request.GetMethod()) {
     case Aws::Http::HttpMethod::HTTP_GET:
       resp = client.get(req);
+      verb = "get";
       break;
     case Aws::Http::HttpMethod::HTTP_POST:
       resp = client.post(req, body, request.GetContentType());
+      verb = "post";
       break;
     case Aws::Http::HttpMethod::HTTP_PUT:
       resp = client.put(req, body, request.GetContentType());
+      verb = "put";
       break;
     case Aws::Http::HttpMethod::HTTP_HEAD:
       resp = client.head(req);
+      verb = "head";
       break;
     case Aws::Http::HttpMethod::HTTP_PATCH:
       LOG(ERROR) << "osquery-http_client does not support HTTP PATCH";
@@ -189,8 +196,10 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
       break;
     case Aws::Http::HttpMethod::HTTP_DELETE:
       resp = client.delete_(req);
+      verb = "delete";
       break;
     default:
+      verb = "error";
       LOG(ERROR) << "Unrecognized HTTP Method used: "
                  << static_cast<int>(request.GetMethod());
       return nullptr;
@@ -212,7 +221,7 @@ std::shared_ptr<Aws::Http::HttpResponse> OsqueryHttpClient::MakeRequest(
   } catch (const std::exception& e) {
     /* NOTE: This exception must NOT be passed by reference. */
     LOG(ERROR) << "Exception making HTTP request to URL (" << url
-               << "): " << e.what();
+               << "): " << e.what() << "with verb " << verb;
     return nullptr;
   }
 
