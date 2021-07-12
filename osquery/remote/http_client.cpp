@@ -11,6 +11,7 @@
 #include <osquery/remote/http_client.h>
 
 #include <boost/asio/connect.hpp>
+#include <boost/optional/optional_io.hpp>
 
 namespace osquery {
 namespace http {
