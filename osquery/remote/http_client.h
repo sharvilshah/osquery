@@ -20,7 +20,6 @@
 #define OPENSSL_NO_MD5 1
 #define OPENSSL_NO_DEPRECATED 1
 
-#define BOOST_BEAST_USE_STD_STRING_VIEW 1
 
 #ifdef WIN32
 // For std:call_once, used below
@@ -36,7 +35,6 @@
 #include <boost/asio/ssl.hpp>
 // clang-format on
 
-#include <string_view>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/optional/optional.hpp>

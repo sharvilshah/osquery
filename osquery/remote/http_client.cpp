@@ -458,16 +458,14 @@ Response Client::put(Request& req,
                      std::string const& content_type) {
   req.method(beast_http::verb::put);
 
-  VLOG(1) << "Body is " << body;
+  VLOG(1) << "-------------";
   VLOG(1) << "Content Type is " << content_type;
   req.body() = body;
   if (!content_type.empty()) {
-    VLOG(1) << "PUT request: Content Type not empty";
-    VLOG(1) << "Body is " << body;
-    VLOG(1) << "Content Type is " << content_type;
+    VLOG(1) << "Content Type (non empty) is " << content_type;
     req.set(beast_http::field::content_type, content_type);
-
   }
+  VLOG(1) << "-------------";
   return sendHTTPRequest(req);
 }
 
@@ -486,15 +484,14 @@ Response Client::put(Request& req,
                      std::string&& body,
                      std::string const& content_type) {
   req.method(beast_http::verb::put);
-  VLOG(1) << "Body is " << body;
+  VLOG(1) << "============";
   VLOG(1) << "Content Type is " << content_type;
   req.body() = std::move(body);
   if (!content_type.empty()) {
-    VLOG(1) << "PUT request: Content Type not empty";
-    VLOG(1) << "Body is " << req.body();
-    VLOG(1) << "Content Type is " << content_type;
+    VLOG(1) << "Content Type (non empty) is " << content_type;
     req.set(beast_http::field::content_type, content_type);
   }
+  VLOG(1) << "============";
   return sendHTTPRequest(req);
 }
 
