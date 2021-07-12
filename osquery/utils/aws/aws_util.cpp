@@ -379,6 +379,7 @@ void initAwsSdk() {
   try {
     std::call_once(once_flag, []() {
       Aws::SDKOptions options;
+      options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Debug;
       options.httpOptions.httpClientFactory_create_fn = []() {
         return std::make_shared<OsqueryHttpClientFactory>();
       };
