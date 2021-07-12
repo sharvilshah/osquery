@@ -465,7 +465,8 @@ Response Client::put(Request& req,
     VLOG(1) << "PUT request: Content Type not empty";
     VLOG(1) << "Body is " << body;
     VLOG(1) << "Content Type is " << content_type;
-    req.set(beast_http::field::content_type, content_type);
+    //req.set(beast_http::field::content_type, content_type);
+
   }
   return sendHTTPRequest(req);
 }
@@ -492,7 +493,7 @@ Response Client::put(Request& req,
     VLOG(1) << "PUT request: Content Type not empty";
     VLOG(1) << "Body is " << req.body();
     VLOG(1) << "Content Type is " << content_type;
-    req.set(beast_http::field::content_type, content_type);
+    //req.set(beast_http::field::content_type, content_type);
   }
   return sendHTTPRequest(req);
 }
