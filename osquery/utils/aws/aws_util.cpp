@@ -447,7 +447,10 @@ std::string getIMDSToken() {
   req << http::Request::Header(kImdsTokenTtlHeader, kImdsTokenTtlDefaultValue);
 
   try {
-    http::Response res = client.put(req, "", "");
+    std::string body;
+    std::string content_type;
+    http::Response res = client.put(req, body, content_type);
+
     token = res.status() == 200 ? res.body() : "";
   } catch (const std::system_error& e) {
     VLOG(1) << "Request for " << kImdsTokenResource << " failed:" << e.what();
