@@ -462,8 +462,15 @@ Response Client::put(Request& req,
   VLOG(1) << "-------------";
   VLOG(1) << "Content Type is " << content_type;
   req.body() = body;
-  VLOG(1) << req.remoteHost();
-  VLOG(1) << req.remotePath();
+  auto host = req.remoteHost();
+  if (host.is_initialized()) {
+    VLOG(1) << req.remoteHost();
+  }
+  auto path = req.remotePath();
+  if (path.is_initialized()) {
+    VLOG(1) << req.remotePath();
+  }
+
   if (!content_type.empty()) {
     VLOG(1) << "Content Type (non empty) is " << content_type;
     req.set(beast_http::field::content_type, content_type);
@@ -490,8 +497,14 @@ Response Client::put(Request& req,
   req.method(beast_http::verb::put);
   VLOG(1) << "============";
   VLOG(1) << "Content Type is " << content_type;
-  VLOG(1) << req.remoteHost();
-  VLOG(1) << req.remotePath();
+  auto host = req.remoteHost();
+  if (host.is_initialized()) {
+    VLOG(1) << req.remoteHost();
+  }
+  auto path = req.remotePath();
+  if (path.is_initialized()) {
+    VLOG(1) << req.remotePath();
+  }
   req.body() = std::move(body);
   if (!content_type.empty()) {
     VLOG(1) << "Content Type (non empty) is " << content_type;
