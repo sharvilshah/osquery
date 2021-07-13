@@ -474,7 +474,8 @@ Response Client::put(Request& req,
 
   if (!content_type.empty()) {
     VLOG(1) << "Content Type (non empty) is " << content_type;
-    req.set(beast_http::field::content_type, content_type);
+    VLOG(1) << "Content Type Size: " << content_type.size();
+    //req.set(beast_http::field::content_type, content_type);
   }
   VLOG(1) << "-------------";
 
@@ -509,7 +510,8 @@ Response Client::put(Request& req,
   req.body() = std::move(body);
   if (!content_type.empty()) {
     VLOG(1) << "Content Type (non empty) is " << content_type;
-    req.set(beast_http::field::content_type, content_type);
+    VLOG(1) << "Content Type Size: " << content_type.size();
+    //req.set(beast_http::field::content_type, content_type);
   }
   VLOG(1) << "============";
   return sendHTTPRequest(req);
