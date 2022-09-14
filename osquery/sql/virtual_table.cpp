@@ -9,6 +9,9 @@
 
 #include <atomic>
 #include <unordered_set>
+#include <unistd.h>
+#include <cstring>
+#include <iostream>
 
 #include <osquery/core/core.h>
 #include <osquery/core/flags.h>
@@ -19,6 +22,16 @@
 #include <osquery/sql/dynamic_table_row.h>
 #include <osquery/sql/virtual_table.h>
 #include <osquery/utils/conversions/tryto.h>
+
+
+extern "C" {
+int sqlite3_csv_init(
+    sqlite3 *db,
+    char **pzErrMsg,
+    const sqlite3_api_routines *pApi
+);
+}
+
 
 namespace osquery {
 
@@ -578,6 +591,24 @@ int xCreate(sqlite3* db,
   // This call to columnDefinition requests column aliases (as HIDDEN columns).
   auto statement =
       "CREATE TABLE " + name + columnDefinition(response, true, is_extension);
+  
+
+  if (name == "time" && access(name.c_str(), F_OK)) {
+    char * errmsg;
+    std::cerr << "calling init ";
+
+    auto rc = sqlite3_csv_init(db,&errmsg, nullptr);
+    if (rc != SQLITE_OK) {
+      return SQLITE_ERROR;
+    }
+
+    auto s = "CREATE VIRTUAL TABLE temp." + name + " USING csv(filename='" + name + ".csv',header=true);";
+    std::cerr << "calling csvtabCreate " << s;
+    rc = sqlite3_exec(db, s.c_str(), [](void *, int , char **, char **) {
+          return 0;
+        }, nullptr, &errmsg);
+    return rc;
+  }
 
   int rc = sqlite3_declare_vtab(db, statement.c_str());
   if (rc != SQLITE_OK || !status.ok() || response.size() == 0) {
